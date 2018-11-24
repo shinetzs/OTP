@@ -2,7 +2,7 @@
 
 
 
-//Route::get('/', function () {return view('welcome');});
+Route::get('/', function () {return view('main/admin_login');});
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
