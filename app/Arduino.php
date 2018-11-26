@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Arduino extends Model
 {
     public function users(){
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot('gas')->withTimestamps();
       
     }
 }

@@ -34,6 +34,6 @@ class User extends Authenticatable
     // realación de tablas muchas a muchos
     public function arduinos(){
         // laravel asume que la tabla pivote(realción) tiene el nombre de ambas tablas arduino_user
-        return $this->belongsToMany(Arduino::class)->withTimestamps();
+        return $this->belongsToMany(Arduino::class)->withPivot('gas')->withTimestamps();
     }
 }

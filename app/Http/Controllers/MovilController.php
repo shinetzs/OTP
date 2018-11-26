@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User; 
+use App\User;
+use App\Arduino;  
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 
@@ -30,7 +31,7 @@ class MovilController extends Controller
     $user = User::create($input);
 
     //creamos el token y se lo enviamos al usuario
-    $success['token'] =  $user->createToken('MyApp')->accessToken;
+    $success['token'] =  $user->createToken(env('APP_NAME'))->accessToken;
     return response()->json(['success'=>$success], 200);
 }
 
@@ -67,7 +68,7 @@ class MovilController extends Controller
         }
 
         //almacenar datos en variables
-        $user = Auth::user()->id;
+        $user = auth('api')->user()->id;
         $idArduino = $request['idArduino'];
         $existencia = Arduino::find($idArduino);
 
@@ -84,7 +85,26 @@ class MovilController extends Controller
         $unionArduinoUsuario = Arduino::findOrFail($idArduino); 
         $unionArduinoUsuario -> users()->attach($user);
 
-            return "registrado";
+            return [
+                'id' => $unionArduinoUsuario->id,
+            ];
+        }
+    }
+        public function enviarDatos(Request $request){
+            
+            $validator = \Validator::make($request -> all(), [
+                'idArduino' =>  'required',
+            ]);
+            
+            $idArduino = $request['idArduino'];
+            $arduino = Arduino::find($idArduino);
+
+            return [
+                'gas' => $arduino->users->last()->pivot
+            ];
+
+            
+            
         }
     }
 
@@ -127,4 +147,4 @@ class MovilController extends Controller
         return "registrado";
     
 } */
-}
+

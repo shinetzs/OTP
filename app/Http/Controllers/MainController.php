@@ -24,7 +24,7 @@ class MainController extends Controller
             $data = $request->all();
             
             if(Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
-                Auth::login(Auth::user(), true);
+                
                 return redirect('admin/dashboard');
             }else{
             
