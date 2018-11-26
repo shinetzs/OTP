@@ -1,21 +1,21 @@
 <?php
 
 
-
+// dirección raíz
 Route::get('/', function () {return view('main/admin_login');});
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::match(['get','post'],'/admin', 'MainController@login');
+Route::match(['get','post'],'admin', 'MainController@login');
 
 
 //proteccion de rutas metodo laravel
 //otra aprte en redirectauthenticated.php
 Route::group(['middleware'=> ['auth']], function(){
-    Route::get('/admin/dashboard', 'MainController@dashboard');
-    Route::get('/logout', 'MainController@logout');
+    Route::get('admin/dashboard', 'MainController@dashboard');
+    Route::get('logout', 'MainController@logout');
     
 });
 

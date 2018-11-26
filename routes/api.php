@@ -18,6 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Excepción de clientes para APIs
-Route::post('/recibirGas', 'MainController@datosArduino');
+Route::post('/recibirGas', 'ArduinoController@datosArduino');
 
-Route::post('/registrar', 'MainController@registroUsuario');
+Route::post('login', 'MovilController@login');
+Route::post('register', 'MovilController@register');
+Route::middleware('auth:api')->post('details', 'MovilController@details');

@@ -21,20 +21,21 @@ class MainController extends Controller
     public function login(Request $request){
         //validación de almacenamiento de datos en "request" con metodo post
         if($request->isMethod('post')){
-            $data = $request->input();
+            $data = $request->all();
             
             if(Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
+                Auth::login(Auth::user(), true);
                 return redirect('admin/dashboard');
             }else{
             
                 return redirect('/admin')->with('flash_message_error','Email o contraseña invalida'); 
             }
         }
-        return view('main.admin_login');
+        return view('main/admin_login');
     }    
     public function dashboard(){
         
-        return view('main.dashboard');
+        return view('main/dashboard');
     }  
 
     //desconectar
@@ -44,46 +45,7 @@ class MainController extends Controller
         return redirect('/admin')->with('flash_message_success','Desconectado Correctamente'); 
     }  
 
-    //recepción de datos arduino con ingreso a bd   --  cambiar de controllador por orden
-    public function datosArduino(Request $request){
 
-        //almacenar datos en variables
-        $idArduino = $request->input('id');
-        $gas = $request->input('gas');
-        
-
-        // relacionar arduino con usuario e insertar nivel de gas
-        $valorIngreso = Arduino::findOrFail($idArduino); 
-        $valorIngreso -> users()->attach($valorIngreso->users->first()->id, ['gas'=> $gas]);
-
-       
-    }
-
-    public function registroUsuario(Request $request){
-
-        //almacenar datos en variables
-        $idArduino = $request['idArduino'];
-        $existencia = Arduino::find($idArduino); 
-        
-        if(!empty($existencia)){
-
-            $validar = \Validator::make($request->all(), [
-                'name'=>'required',
-                'email'=>'required|email|unique:users',
-                'password'=>'required',
-            ]);
-        
-        
-        /* User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => bcrypt($request['password']),
-        ]); */
-
-            /* return "ingresado"; */
-        }else{
-            return "arduino no existe";
-        }
     }
             
 
@@ -125,4 +87,4 @@ class MainController extends Controller
             //echo "false";die;
         }
         } */
-    }
+    
