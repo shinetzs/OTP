@@ -14,16 +14,16 @@ class MovilController extends Controller
 
     public function register(Request $request){
          
-    $validator = Validator::make($request->all(), [ //creamos la validación
-        'name' => 'required', 
-        'email' => 'required|email', 
-        'password' => 'required', 
-        'c_password' => 'required|same:password', 
-    ]);
+        $validator = Validator::make($request->all(), [ //creamos la validación
+             'name' => 'required', 
+             'email' => 'required|email', 
+             'password' => 'required', 
+             'c_password' => 'required|same:password', 
+        ]);
 
-    if ($validator->fails()) {//validamos
-        return response()->json(['error'=>$validator->errors()], 401);
-    }
+        if ($validator->fails()) {//validamos
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
     
     //creamos el usuario
     $input = $request->all();
@@ -48,11 +48,11 @@ class MovilController extends Controller
     }
     
 
-    public function details() { 
-    $user = Auth::user(); 
-    return response()->json(['success' => $user], 200); 
-}
-
+    /* public function details() { 
+        $user = Auth::user(); 
+        return response()->json(['success' => $user], 200); 
+    }
+ */
     public function registroArduino(Request $request) {
         
         // validar campos vacios, existencia en bd.
@@ -68,7 +68,7 @@ class MovilController extends Controller
         }
 
         //almacenar datos en variables
-        $user = auth('api')->user()->id;
+        $user = $request['idUsuario'];
         $idArduino = $request['idArduino'];
         $existencia = Arduino::find($idArduino);
 
@@ -78,9 +78,9 @@ class MovilController extends Controller
             return "arduino no existe";
           
         }else{
-         //validar que no exista union y si existe validar q sea el mismo dueño   
-
-
+         //validar que no exista union y si existe validar q sea el mismo dueño 
+         
+         
         //unir usuario arduino
         $unionArduinoUsuario = Arduino::findOrFail($idArduino); 
         $unionArduinoUsuario -> users()->attach($user);
@@ -88,24 +88,35 @@ class MovilController extends Controller
             return [
                 'id' => $unionArduinoUsuario->id,
             ];
+
         }
     }
-        public function enviarDatos(Request $request){
+
+
+    public function enviarDatos(Request $request){
             
-            $validator = \Validator::make($request -> all(), [
+        $validator = \Validator::make($request -> all(), [
                 'idArduino' =>  'required',
-            ]);
+        ]);
             
-            $idArduino = $request['idArduino'];
-            $arduino = Arduino::find($idArduino);
+        $idArduino = $request['idArduino'];
+        $arduino = Arduino::find($idArduino);
 
-            return [
-                'gas' => $arduino->users->last()->pivot
+        return [
+            'gas' => $arduino->users->last()->pivot->gas
             ];
-
-            
-            
         }
+
+
+    public function listaArduinos(){
+        $validator = \Validator::make($request -> all(), [
+            'idUsuario' =>  'required',
+        ]);    
+
+        return App\User::find($request['idUsuario'])->Arduinos()->wherePivot('gas', null)->get();
+
+    }
+   
     }
 
 

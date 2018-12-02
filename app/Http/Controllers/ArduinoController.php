@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Arduino;
 class ArduinoController extends Controller
 {
     //recepción de datos arduino con ingreso a bd   --  cambiar de controllador por orden
@@ -18,6 +18,6 @@ class ArduinoController extends Controller
         $valorIngreso = Arduino::findOrFail($idArduino); 
         $valorIngreso -> users()->attach($valorIngreso->users->first()->id, ['gas'=> $gas]);
 
-       
+    return 'llego';
     }
 }

@@ -34,8 +34,8 @@ class MainController extends Controller
         return view('main/admin_login');
     }    
     public function dashboard(){
-        
-        return view('main/dashboard');
+        $users = User::all();
+        return view('main/dashboard')->with('users', $users);
     }  
 
     //desconectar
