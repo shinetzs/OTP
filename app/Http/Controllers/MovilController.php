@@ -57,9 +57,7 @@ class MovilController extends Controller
         
         // validar campos vacios, existencia en bd.
         $validator = \Validator::make($request -> all(), [
-            'idUsuario'=>   'required',
             'idArduino' =>  'required',
-            'Direccion' =>  'required',
         ]);
 
         //retornar fallos de validación $validar
@@ -68,7 +66,7 @@ class MovilController extends Controller
         }
 
         //almacenar datos en variables
-        $user = $request['idUsuario'];
+        $user = Auth::id();
         $idArduino = $request['idArduino'];
         $existencia = Arduino::find($idArduino);
 
@@ -85,9 +83,7 @@ class MovilController extends Controller
         $unionArduinoUsuario = Arduino::findOrFail($idArduino); 
         $unionArduinoUsuario -> users()->attach($user);
 
-            return [
-                'id' => $unionArduinoUsuario->id,
-            ];
+            return 'agregado con exito';
 
         }
     }
@@ -109,11 +105,9 @@ class MovilController extends Controller
 
 
     public function listaArduinos(){
-        $validator = \Validator::make($request -> all(), [
-            'idUsuario' =>  'required',
-        ]);    
+        
 
-        return App\User::find($request['idUsuario'])->Arduinos()->wherePivot('gas', null)->get();
+        return User::find(Auth::id())->Arduinos()->wherePivot('gas', null)->get();
 
     }
    
