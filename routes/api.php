@@ -23,10 +23,14 @@ Route::post('login', 'MovilController@login');
 Route::post('register', 'MovilController@register');
 Route::post('enviarGas', 'MovilController@enviarDatos');
 
-Route::middleware('auth:api')->post('registroArduino', 'MovilController@registroArduino');
+Route::post('registroArduino', 'MovilController@registroArduino')->middleware('auth:api');
 
-Route::post('listaArduino', 'MovilController@listaArduinos'); 
+
 
 Route::group(['middleware'=> ['api']], function(){
-    post('details', 'MovilController@details'); 
+    Route::post('details', 'MovilController@details'); 
+});
+
+Route::middleware('auth:api')   ->group(function(){
+    Route::post('listaArduino', 'MovilController@listaArduinos'); 
 });
