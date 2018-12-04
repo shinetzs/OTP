@@ -107,7 +107,7 @@ class MovilController extends Controller
     public function listaArduinos(){
         
 
-        return User::find(Auth::id())->Arduinos()->wherePivot('gas', null)->get();
+        return User::find(1)->Arduinos()->wherePivot('gas', null)->get();
 
     }
    
