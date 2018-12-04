@@ -32,5 +32,6 @@ Route::group(['middleware'=> ['api']], function(){
 });
 
 Route::middleware('auth:api')   ->group(function(){
+    
     Route::post('listaArduino', 'MovilController@listaArduinos'); 
 });
