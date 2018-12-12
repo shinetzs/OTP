@@ -2,8 +2,7 @@
 
 
 // dirección raíz
-Route::get('/', function () {return view('index');});
-Route::get('/login', function () {return view('main/admin_login');});
+Route::get('/', function () {return view('main/admin_login');});
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
