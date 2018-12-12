@@ -18,20 +18,24 @@ use Illuminate\Http\Request;
 }); */
 
 // Excepción de clientes para APIs
-Route::post('recibirGas', 'ArduinoController@datosArduino');
+Route::post('recibirGas/{id}/{gas}', 'ArduinoController@datosArduino');
 Route::post('login', 'MovilController@login');
 Route::post('register', 'MovilController@register');
-Route::post('enviarGas', 'MovilController@enviarDatos');
+Route::post('listaValor', 'MovilController@enviarDatos');
+Route::get('abrirValvula', 'MovilController@abrirValvula');
+Route::get('cerrarValvula', 'MovilController@cerrarValvula');
 
 Route::post('registroArduino', 'MovilController@registroArduino')->middleware('auth:api');
 
-
-
-Route::group(['middleware'=> ['api']], function(){
+Route::match(['get','post'], '/test', function (Illuminate\Http\Request $request) {
+    dd($request->headers->all());
+});
+Route::group(['middleware'=> ['auth:api']], function(){
     Route::post('details', 'MovilController@details'); 
 });
 
-Route::middleware('auth:api')   ->group(function(){
+Route::middleware('auth:api')->group(function(){
     
     Route::post('listaArduino', 'MovilController@listaArduinos'); 
 });
+

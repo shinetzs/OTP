@@ -7,6 +7,8 @@ use App\User;
 use App\Arduino;  
 use Illuminate\Support\Facades\Auth; 
 use Validator;
+use Ixudra\Curl\Facades\Curl;
+use GuzzleHttp\Client;
 
 class MovilController extends Controller
 {
@@ -48,11 +50,11 @@ class MovilController extends Controller
     }
     
 
-    /* public function details() { 
+     public function details() { 
         $user = Auth::user(); 
         return response()->json(['success' => $user], 200); 
     }
- */
+ 
     public function registroArduino(Request $request) {
         
         // validar campos vacios, existencia en bd.
@@ -98,19 +100,27 @@ class MovilController extends Controller
         $idArduino = $request['idArduino'];
         $arduino = Arduino::find($idArduino);
 
-        return [
-            'gas' => $arduino->users->last()->pivot->gas
-            ];
+        return $arduino->users->last()->pivot->gas;
+            
         }
-
+    
 
     public function listaArduinos(){
         
 
-        return User::find(1)->Arduinos()->wherePivot('gas', null)->get();
+        return User::find(Auth::id())->Arduinos()->wherePivot('gas', null)->get();
 
     }
    
+    public function cerrarValvula(){
+        $response = Curl::to('http://192.168.0.14/?off')->get();
+        return "cerrado";
+    }
+
+    public function abrirValvula(){
+        $response = Curl::to('http://192.168.0.14/?on')->get();
+        return "abierto";
+    }
     }
 
 
