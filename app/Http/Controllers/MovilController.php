@@ -45,7 +45,7 @@ class MovilController extends Controller
             $success['token'] =  $user->createToken('MyApp')->accessToken; //creamos el token
             return response()->json(['success' => $success], 200);//se lo enviamos al usuario
         } else {
-            return response()->json(['error'=>'Correo o Contraseña Invalida'], 401); 
+            return response()->json(['error'=>'Correo o Clave Invalida'], 401); 
         }
     }
     
@@ -75,7 +75,7 @@ class MovilController extends Controller
         //verificar existencia y disponibilidad de sistema electronico
         if (empty($existencia)) { //falta validar estado de uso
 
-            return "Código invalido"; 
+            return response()->json(['error'=>'El código ingresado no existe'], 401); 
           
         }else{
          //validar que no exista union y si existe validar q sea el mismo dueño 
@@ -114,12 +114,12 @@ class MovilController extends Controller
    
     public function cerrarValvula(){
         $response = Curl::to('http://192.168.0.14/?off')->get();
-        return "Valvula Cerrada";
+        return response()->json(['success' => "Valvula Cerrada"], 200); 
     }
 
     public function abrirValvula(){
         $response = Curl::to('http://192.168.0.14/?on')->get();
-        return "Valvula abierta";
+        return response()->json(['success' => "Valvula Abierta"], 200); 
     }
     }
 
