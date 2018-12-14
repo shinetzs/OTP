@@ -75,7 +75,7 @@ class MovilController extends Controller
         //verificar existencia y disponibilidad de sistema electronico
         if (empty($existencia)) { //falta validar estado de uso
 
-            return response()->json(['error'=>'El código ingresado no existe'], 401); 
+            return "Código invalido"; 
           
         }else{
          //validar que no exista union y si existe validar q sea el mismo dueño 
@@ -114,12 +114,12 @@ class MovilController extends Controller
    
     public function cerrarValvula(){
         $response = Curl::to('http://192.168.0.14/?off')->get();
-        return response()->json(['success' => "Valvula Cerrada"], 200); 
+        return "Valvula Cerrada";
     }
 
     public function abrirValvula(){
         $response = Curl::to('http://192.168.0.14/?on')->get();
-        return response()->json(['success' => "Valvula Abierta"], 200); 
+        return "Valvula abierta";
     }
     }
 
