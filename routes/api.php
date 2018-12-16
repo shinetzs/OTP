@@ -25,17 +25,19 @@ Route::post('listaValor', 'MovilController@enviarDatos');
 Route::get('abrirValvula', 'MovilController@abrirValvula');
 Route::get('cerrarValvula', 'MovilController@cerrarValvula');
 
-Route::post('registroArduino', 'MovilController@registroArduino')->middleware('auth:api');
+Route::post('registroArduino', 'MovilController@registroArduino');
 
 Route::match(['get','post'], '/test', function (Illuminate\Http\Request $request) {
     dd($request->headers->all());
 });
 Route::group(['middleware'=> ['auth:api']], function(){
     Route::post('details', 'MovilController@details'); 
+    
 });
 
 Route::middleware('auth:api')->group(function(){
     
     Route::post('listaArduino', 'MovilController@listaArduinos'); 
+    Route::post('registroArduino', 'MovilController@registroArduino');
 });
 

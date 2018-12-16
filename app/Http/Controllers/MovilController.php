@@ -24,7 +24,7 @@ class MovilController extends Controller
         ]);
 
         if ($validator->fails()) {//validamos
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>"Campos vacios o claves no coinciden"], 401);
         }
     
     //creamos el usuario
@@ -35,6 +35,7 @@ class MovilController extends Controller
     //creamos el token y se lo enviamos al usuario
     $success['token'] =  $user->createToken(env('APP_NAME'))->accessToken;
     return response()->json(['success'=>$success], 200);
+    
 }
 
 
@@ -64,18 +65,20 @@ class MovilController extends Controller
 
         //retornar fallos de validación $validar
         if ($validator -> fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json('Campos vacios', 401);
+
+
         }
 
         //almacenar datos en variables
         $user = Auth::id();
         $idArduino = $request['idArduino'];
         $existencia = Arduino::find($idArduino);
-
+      
         //verificar existencia y disponibilidad de sistema electronico
         if (empty($existencia)) { //falta validar estado de uso
 
-            return response()->json(['error'=>'El código ingresado no existe'], 401); 
+            return response()->json("El código ingresado no existe", 401); 
           
         }else{
          //validar que no exista union y si existe validar q sea el mismo dueño 
@@ -85,7 +88,7 @@ class MovilController extends Controller
         $unionArduinoUsuario = Arduino::findOrFail($idArduino); 
         $unionArduinoUsuario -> users()->attach($user);
 
-         return response()->json(['success' => "Dispositivo Ingresado Correctamente"], 200); 
+        return response()->json("Registro realizado", 200); 
 
         }
     }
@@ -98,9 +101,12 @@ class MovilController extends Controller
         ]);
             
         $idArduino = $request['idArduino'];
-        $arduino = Arduino::find($idArduino);
-
-        return $arduino->users->last()->pivot->gas;
+        
+        $arduino = Arduino::find($idArduino)->users->last()->pivot->gas; 
+        
+       
+        return response()->json(['success' => $arduino], 200);
+           
             
         }
     
