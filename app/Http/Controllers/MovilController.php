@@ -51,10 +51,10 @@ class MovilController extends Controller
     }
     
 
-     public function details() { 
+    /*  public function details() { 
         $user = Auth::user(); 
         return response()->json(['success' => $user], 200); 
-    }
+    } */
  
     public function registroArduino(Request $request) {
         
@@ -82,14 +82,19 @@ class MovilController extends Controller
           
         }else{
          //validar que no exista union y si existe validar q sea el mismo dueño 
-         
-         
+        // $arduino = User::find(Auth::id())->arduinos()->wherePivot('gas', null)->wherePivot('arduino_id', $idArduino)->get()->first();
+         $arduino = User::find(Auth::id())->arduinos()->wherePivot('gas', null)->wherePivot('arduino_id', $idArduino)->get()->first();
+        // return response()->json($idArduino); 
+         if(empty($arduino)) {
         //unir usuario arduino
+        
         $unionArduinoUsuario = Arduino::findOrFail($idArduino); 
         $unionArduinoUsuario -> users()->attach($user);
 
-        return response()->json("Registro realizado", 200); 
-
+        return response()->json("Registro realizado", 200);
+         }else{
+            return response()->json("El dispositivo ya esta en tu lista", 401); 
+         }
         }
     }
 
@@ -101,10 +106,11 @@ class MovilController extends Controller
         ]);
             
         $idArduino = $request['idArduino'];
-        
-        $arduino = Arduino::find($idArduino)->users->last()->pivot->gas; 
-        
-       
+
+        //Buscar gas del dispositivo solicitado
+        $arduino = Arduino::find($idArduino)->Users()->wherePivot('gas', '!=', null)->get()->last()->pivot->gas;
+        // Arduino::find($idArduino)->users->last()->pivot->gas; 
+
         return response()->json(['success' => $arduino], 200);
            
             
@@ -113,7 +119,7 @@ class MovilController extends Controller
 
     public function listaArduinos(){
         
-
+        //
         return User::find(Auth::id())->Arduinos()->wherePivot('gas', null)->get();
 
     }
